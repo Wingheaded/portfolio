@@ -264,3 +264,72 @@ section.features .features-container {
   grid-template-columns: repeat(4, minmax(250px, 1fr));
   gap: 2rem;         /* adjust the gutter between cards */
 }
+
+/* —— Contact Form —— */
+.contact-form { /* This is the DIV wrapper */
+  max-width: 600px; /* Limit form width for better readability */
+  margin: 0 auto; /* Center the form */
+  /* The direct child <form> will handle the layout of groups and button */
+}
+
+.contact-form form { /* Targeting the <form> element itself */
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Space between form groups and button */
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* Space between label and input */
+}
+
+.form-group label {
+  font-weight: 500;
+  color: var(--text-light);
+  margin-bottom: 0.25rem; /* Added small margin for better spacing with input */
+}
+
+.form-input,
+.form-textarea {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-light);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--accent-pink); /* Highlight focus with accent color */
+  box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.3); /* Subtle glow for focus, using accent-pink */
+}
+
+.form-textarea {
+  min-height: 120px;
+  resize: vertical; /* Allow vertical resizing, disable horizontal */
+}
+
+.submit-button {
+  background: linear-gradient(45deg, var(--accent-pink), var(--accent-orange));
+  color: var(--text-white);
+  padding: 0.85rem 1.5rem;
+  border-radius: 50px; /* Pill shape like hero CTA */
+  border: none;
+  font-weight: 600;
+  letter-spacing: .025em;
+  text-transform: uppercase; /* Consistent with other buttons/labels */
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+  align-self: center; /* Center button within the form */
+  margin-top: 1rem; /* Add some space above the button */
+}
+
+.submit-button:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: var(--hover-shadow);
+}
