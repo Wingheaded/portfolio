@@ -1,0 +1,266 @@
+/* =================================================================== */
+/* 0) GLOBAL RESET                                                     */
+/* =================================================================== */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* =================================================================== */
+/* 1) DESIGN TOKENS – colours, shadows, etc.                           */
+/* =================================================================== */
+:root {
+  /* Hero gradient */
+  --hero-radial-center:#e9e2f7;
+  --hero-radial-mid:#7A3ACF;
+  --hero-radial-outer:#1b024f;
+
+  /* Glassmorphism */
+  --glass-bg:rgba(255,255,255,.08);
+  --glass-border:rgba(255,255,255,.12);
+
+  /* Text colours */
+  --text-white:#fff;
+  --text-light:rgba(255,255,255,.92);
+
+  /* Accents */
+  --accent-pink:#EAB308;   /* warm yellow/gold */
+  --accent-orange:#F97316; /* bright orange    */
+
+  /* Shadows */
+  --card-shadow:0 6px 20px rgba(40,20,90,.15);
+  --hover-shadow:0 10px 28px rgba(40,20,90,.22);
+}
+
+/* =================================================================== */
+/* 2) BASE ELEMENTS                                                    */
+/* =================================================================== */
+body {
+  font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background:var(--hero-radial-outer);
+  color:var(--text-white);
+  line-height:1.6;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+
+img{display:block;max-width:100%;height:auto}
+
+/* layout helper */
+.container{
+  max-width:1200px;
+  margin:0 auto;
+  padding:0 2rem;
+}
+
+/* =================================================================== */
+/* 3) NAVIGATION BAR                                                   */
+/* =================================================================== */
+.navbar{
+  position:fixed;
+  inset:0 0 auto 0;               /* top:0 left/right:0 */
+  z-index:1000;
+  display:flex;                   /* one child (.container) */
+  align-items:center;
+  background:rgba(255,255,255,.03);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--glass-border);
+  padding:1rem 0;                 /* vertical only – horizontal comes from .container */
+}
+
+/* NEW ➜ keep children inside .container on one row */
+.navbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;  /* logo left · menu right */
+
+  /* ➤ Override default container sizing */
+  max-width: none;  /* remove 1200px cap */
+  width: 100%;      /* stretch full width */
+  margin: 0;        /* cancel auto-centering */
+}
+
+
+.site-brand{
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+}
+.site-logo img{height:2.5rem;width:auto}
+.site-title{font-size:1.125rem;font-weight:500;color:var(--text-white)}
+
+.nav-links{
+  display:flex;
+  gap:2rem;
+  list-style:none;
+  margin-left:auto;               /* fallback – flex still respects */
+}
+
+.nav-links a{
+  position:relative;
+  color:var(--text-light);
+  text-decoration:none;
+  font-weight:500;
+  padding-bottom:4px;
+  transition:color .3s,transform .3s;
+}
+.nav-links a:hover{color:var(--text-white);transform:translateY(-1px)}
+.nav-links a::after{
+  content:"";
+  position:absolute;
+  inset:auto 0 0 0;
+  height:2px;
+  background:var(--accent-pink);
+  transform:scaleX(0);
+  transform-origin:left bottom;
+  transition:transform .3s;
+}
+.nav-links a:hover::after{transform:scaleX(1)}
+
+/* =================================================================== */
+/* 4) HERO SECTION                                                     */
+/* =================================================================== */
+.hero{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  padding:8rem 0 4rem;           /* leaves room for navbar */
+  background:radial-gradient(
+    ellipse farthest-corner at 75% 25%,
+    var(--hero-radial-center) 0%,
+    var(--hero-radial-mid) 40%,
+    var(--hero-radial-outer) 100%);
+}
+
+.hero .container{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:2rem;
+  align-items:center;
+}
+
+.hero-left{z-index:5;padding-right:1rem}
+.hero-label{
+  font-size:.875rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-light);margin-bottom:1.5rem;
+}
+.hero-title{
+  font-size:clamp(3.2rem,7vw,5.8rem);
+  font-weight:800;line-height:1.05;letter-spacing:-.02em;margin-bottom:2.5rem;
+}
+.hero-title span{display:block}
+.hero-cta{
+  display:inline-block;padding:.9rem 1.8rem;border-radius:50px;
+  background:var(--text-white);color:#667eea;font-weight:600;letter-spacing:.025em;
+  box-shadow:var(--card-shadow);transition:all .3s;
+}
+.hero-cta:hover{transform:translateY(-3px) scale(1.03);box-shadow:var(--hover-shadow);background:#f0f0f0}
+
+/* right column */
+.hero-image{position:relative;margin-left:auto}
+.hero-image img{max-width:100%;height:auto}
+
+/* =================================================================== */
+/* 5) FLOATING CARDS                                                   */
+/* =================================================================== */
+.floating-card{
+  position:absolute;
+  background:var(--glass-bg);
+  backdrop-filter:blur(15px);
+  border:1px solid var(--glass-border);
+  border-radius:15px;
+  padding:1rem;
+  box-shadow:var(--card-shadow);
+  animation:floatAnimation 8s ease-in-out infinite;
+  transition:transform .3s;
+  z-index:10;
+}
+.floating-card:hover{transform:scale(1.03) translateY(var(--js-translate-y,-5px))}
+
+/* positions */
+.floating-card.card-1{width:clamp(100px,22vw,100px);top:20%;right:45%;animation-delay:-.5s}
+.floating-card.card-2{width:clamp(100px,16vw,100px);top:50%;right:20%;animation-delay:-2.5s}
+.floating-card.card-3{width:clamp(100px,22vw,100px);bottom:30%;right:45%;animation-delay:-4.5s}
+.floating-card.card-4{width:clamp(100px,18vw,100px);bottom:10%;left:60%;animation-delay:-1.5s}
+.floating-card.card-5{width:clamp(100px,16vw,100px);top:20%;right:23%;animation-delay:-5.5s}
+
+@keyframes floatAnimation{
+  0%,100%{transform:translateY(0) rotate(-1deg)}
+  50%{transform:translateY(-15px) rotate(1deg)}
+}
+
+.floating-card .tooltip{
+  position:absolute;bottom:calc(100% + .5rem);left:50%;transform:translateX(-50%);
+  background:var(--glass-bg);border:1px solid var(--glass-border);backdrop-filter:blur(10px);
+  padding:.4rem .8rem;border-radius:6px;font-size:.8rem;line-height:1.2;
+  color:var(--text-white);white-space:nowrap;opacity:0;visibility:hidden;transition:opacity .2s;pointer-events:none;z-index:20;
+}
+.floating-card .tooltip::after{
+  content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:6px solid transparent;border-top-color:var(--glass-bg);
+}
+.floating-card:hover .tooltip{opacity:1;visibility:visible}
+
+/* =================================================================== */
+/* 6) SECTION LAYOUTS                                                 */
+/* =================================================================== */
+.about,.features,.contact{padding:6rem 0}
+.about{background:rgba(255,255,255,.03)}
+.features{background:rgba(0,0,0,.15)}
+.contact{background:rgba(0,0,0,.2)}
+
+.section-title{font-size:clamp(2.2rem,5vw,3rem);font-weight:800;margin-bottom:1.5rem}
+.section-description{font-size:clamp(1rem,2.5vw,1.15rem);line-height:1.7;color:var(--text-light);max-width:1000px;margin:0 auto 3rem}
+
+/* —— About skills —— */
+.skills-grid{display:grid;grid-template-columns:repeat(3, 1fr);gap:1.8rem}
+.skill-item{background:var(--glass-bg);backdrop-filter:blur(15px);border:1px solid var(--glass-border);border-radius:15px;padding:1.8rem;text-align:left;transition:transform .3s,box-shadow .3s}
+.skill-item:hover{transform:translateY(-5px) scale(1.02);box-shadow:var(--hover-shadow)}
+.skill-icon{width:45px;height:45px;border-radius:10px;background:linear-gradient(45deg,var(--accent-pink),var(--accent-orange));margin:0 0 1rem;display:flex;align-items:center;justify-content:center;color:#fff}
+.skill-name{font-weight:700;font-size:1.1rem;margin-bottom:.5rem}
+.skill-description{font-size:.88rem;color:var(--text-light);line-height:1.5}
+
+/* —— Features: 4 cards per row —— */
+.features-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);  /* four equal columns */
+  gap: 2rem;                               /* space between cards */
+}
+
+/* —— 2) Slim down each card —— */
+.feature-card {
+- padding: 2rem 1.5rem;
++ padding: 1.4rem 1.2rem;
+
+  background: var(--glass-bg);
+  backdrop-filter: blur(15px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  text-align: left;
+  transition: transform .3s, box-shadow .3s;
+}
+.feature-card:hover{transform:translateY(-6px) scale(1.02);box-shadow:var(--hover-shadow)}
+.feature-icon{width:50px;height:50px;border-radius:12px;background:linear-gradient(45deg,var(--accent-pink),var(--accent-orange));display:flex;align-items:center;justify-content:center;margin-bottom:1.2rem;font-size:1.6rem;color:#fff}
+.feature-label{font-size:.8rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-light);margin-bottom:.5rem}
+.feature-title{font-size:1.3rem;font-weight:700;margin-bottom:.75rem}
+.feature-description{
+  font-size: .9rem;
+  color: var(--text-light);
+  line-height: 1.5;
+}
+
+  /* —— Projects/Features: full-width 4-col grid with smaller cards —— */
+section.features .features-container {
+  /* 1) stretch the container edge-to-edge */
+  max-width: none;   /* kill the 1200px cap */
+  width: 100%;       /* fill the viewport */
+  margin: 0;         /* no centering */
+  padding: 0 2rem;   /* keep your side-gutters */
+
+  /* 2) grid layout */
+  display: grid;
+  /* exactly 4 columns, each at least 250px wide, then share remaining space equally */
+  grid-template-columns: repeat(4, minmax(250px, 1fr));
+  gap: 2rem;         /* adjust the gutter between cards */
+}
